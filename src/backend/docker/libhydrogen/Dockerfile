@@ -9,11 +9,8 @@ RUN apk update && \
         lld \
         make \
         wasi-sdk \
-        wasi-libcxx \
-        zig
+        wasi-libcxx
 
 WORKDIR /data/
 
-ADD . .
-
-ENTRYPOINT [ "zig", "build", "-Dtarget=wasm32-wasi" ]
+ENTRYPOINT [ "clang", "-target", "wasm32-wasi", "--sysroot=/usr/share/wasi-sysroot", "-o", "build/libhydrogen.wasm", "src/hydrogen.c" ]
