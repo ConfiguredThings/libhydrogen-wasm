@@ -1,0 +1,15 @@
+{
+  "name": "wasm",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npm run -s preinstall-docker && npm run -s preinstall-wasm",
+    "preinstall-docker": "docker build -t libhydrogen -f ../../docker/libhydrogen/Dockerfile ../../vendor/libhydrogen",
+    "preinstall-wasm": "docker run -v $(pwd)/../../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../../backend/vendor/libhydrogen:/data/src:ro -t libhydrogen",
+    "start": "node index.js"
+  },
+  "author": "Configured Things Ltd.",
+  "license": "UNLICENSED",
+  "description": ""
+}

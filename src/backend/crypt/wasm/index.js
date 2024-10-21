@@ -11,7 +11,7 @@ const wasi = new WASI({
 
 (async () => {
   const wasm = await WebAssembly.compile(
-    await readFile('./build/backend/vendor/libhydrogen/libhydrogen.wasm'),
+    await readFile('../../../../build/backend/vendor/libhydrogen/libhydrogen.wasm'),
   );
   const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
   

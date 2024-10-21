@@ -8,11 +8,11 @@
 >git clone --recursive
 >```
 
-Run the following commands to build a container in which the wasm library can be built, run said container to build the library and have it output to `build/`:
+Run the following commands to build and run a container in which the wasm library is built.
 
-1. `docker build -t libhydrogen -f src/backend/docker/libhydrogen/Dockerfile src/backend/vendor/libhydrogen`
-2. `docker run -v $(pwd)/build/backend/vendor/libhydrogen:/data/build -v $(pwd)/src/backend/vendor/libhydrogen:/data/src:ro -t libhydrogen`
+1. `cd src/backend/crypt/wasm`
+2. `npm install`
 
-To run an example of a nodejs program calling this library, run the following:
+To run an example program that calls into this wasm library to generate uniformly distributed random numbers, run the following:
 
-1. `node src/backend/crypt/index.js`
+1. `npm start`

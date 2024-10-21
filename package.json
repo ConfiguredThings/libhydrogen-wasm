@@ -1,0 +1,23 @@
+{
+  "name": "dsbd-sonata",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConfiguredThings/dsbd-sonata.git"
+  },
+  "keywords": [
+    "dsbd",
+    "sonata"
+  ],
+  "author": "Configured Things Ltd.",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ConfiguredThings/dsbd-sonata/issues"
+  },
+  "homepage": "https://github.com/ConfiguredThings/dsbd-sonata#readme"
+}
