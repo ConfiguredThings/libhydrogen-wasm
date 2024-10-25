@@ -35,10 +35,11 @@ function random_uniform() {
 
 function hash() {
   const { hydro_hash_hash } = instance.exports
-  const array = new Int32Array(dataview.buffer, 0, 32)                                        // Creating a typed array as hydro_hash_hash expects i32s
-  const context = "Examples";                                                                 // libhydrogen's namespacing concept
-  const message = "Arbitrary data to hash";                                                   // Our message to be hashed
+  const array = new Uint8Array(dataview.buffer, 0, 32)                                        // Creating a typed array as hydro_hash_hash expects i32s
+  const context = 'Examples';                                                                 // libhydrogen's namespacing concept
+  const message = 'Arbitrary data to hash';                                                   // Our message to be hashed
   hydro_hash_hash(array.byteOffset, array.length, Buffer.from(message),                       // Call the imported hashing function
     Buffer.from(message).length, Buffer.from(context), null)
-  console.log(dataview)                                                                       // Visually checking the underlying arraybuffer contains the hash
+  const hash = Buffer.from(array).toString('hex')                                             // Outputting hash as string
+  console.log(hash);
 }
