@@ -42,4 +42,5 @@ function hash() {
     Buffer.from(message).length, Buffer.from(context), null)
   const hash = Buffer.from(array).toString('hex')                                             // Outputting hash as string
   console.log(hash);
+  array.fill(0, 0, 32);
 }
