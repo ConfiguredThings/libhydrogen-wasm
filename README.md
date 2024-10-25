@@ -13,6 +13,6 @@ Run the following commands to build and run a container in which the wasm librar
 1. `cd src/backend/crypt`
 2. `npm install`
 
-To run an example program that calls into this wasm library to generate uniformly distributed random numbers, run the following:
+To run a set of examples that call into the wasm library demonstrating its functionality, run the following:
 
 1. `npm run examples`
