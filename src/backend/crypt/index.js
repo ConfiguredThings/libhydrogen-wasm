@@ -13,7 +13,7 @@ const imports = wasi.getImportObject();
 
 (async () => {
   const wasm = await WebAssembly.compile(
-    await readFile('../../../../build/backend/vendor/libhydrogen/libhydrogen.wasm')           // Fetching our wasm built during npm install
+    await readFile('../../../build/backend/vendor/libhydrogen/libhydrogen.wasm')           // Fetching our wasm built during npm install
   );
   const instance = await WebAssembly.instantiate(wasm, imports);
 
