@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npm run -s preinstall-docker && npm run -s preinstall-wasm",
-    "preinstall-docker": "docker build -t libhydrogen -f ../docker/libhydrogen/Dockerfile ../vendor/libhydrogen",
-    "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../backend/vendor/libhydrogen:/data/src:ro -t libhydrogen",
+    "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
+    "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../common/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
     "start": "node index.js"
   },
   "author": "Configured Things Ltd.",
