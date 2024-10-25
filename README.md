@@ -15,4 +15,4 @@ Run the following commands to build and run a container in which the wasm librar
 
 To run an example program that calls into this wasm library to generate uniformly distributed random numbers, run the following:
 
-1. `npm start`
+1. `npm run examples`
