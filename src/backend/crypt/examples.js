@@ -48,8 +48,8 @@ function hash() {
 
 function keyed_hash() {
   console.log('keyed_hash')
-  const context = "Examples"
-  const message = "Arbitrary data to hash"
+  const context = 'Examples'
+  const message = 'Arbitrary data to hash'
 
   const { hydro_hash_keygen, hydro_hash_hash } = instance.exports                             // Importing libhydrogen's hashing keygen and hash functions
   const keyedhash = new Uint8Array(dataview.buffer, 0, 32)                                    // Using first 128bits of memory to store hash
