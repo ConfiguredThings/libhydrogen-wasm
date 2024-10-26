@@ -88,4 +88,7 @@ function keyed_hash() {
     console.log('khash3 using old key, matches historicHash')
   if(khash1 != khash3)                                                                        // ...and doesn't match the hashes with the latest key
     console.log('khash3 does not equal khash1')
+  keyedhash.fill(0, 0, 32);
+  key.fill(0, 0, 32);
+}
 }
