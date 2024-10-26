@@ -25,6 +25,7 @@ var instance, dataview;
   random_uniform()
   hash()
   keyed_hash()
+  public_key_signing()
 
 })();
 
@@ -91,4 +92,40 @@ function keyed_hash() {
   keyedhash.fill(0, 0, 32);
   key.fill(0, 0, 32);
 }
+
+function public_key_signing() {
+  console.log('public_key_signing')
+  const context = 'Examples'
+  const message = 'Arbitrary data to sign'
+  const hydro_sign_BYTES = 64
+  const hydro_sign_PUBLICKEYBYTES = 32
+  const hydro_sign_SECRETKEYBYTES = 64
+
+  const { hydro_sign_keygen, hydro_sign_create, hydro_sign_verify } = instance.exports        // Importing libhydrogen's signing keygen and signing and verification functions
+  const keypair = new Uint8Array(dataview.buffer, 0,                                          // Reserving memory for the keypair
+    hydro_sign_PUBLICKEYBYTES + hydro_sign_SECRETKEYBYTES)
+  
+  hydro_sign_keygen(keypair.byteOffset)                                                       // Generating keypair
+
+  const signature = new Uint8Array(dataview.buffer, keypair.length,                           // Reserving memory for the signature
+    hydro_sign_BYTES)
+
+  hydro_sign_create(signature.byteOffset, Buffer.from(message),                               // Creating signature of message with secret key
+    Buffer.from(message).length, Buffer.from(context), 
+    keypair.byteOffset + hydro_sign_PUBLICKEYBYTES)
+  
+  console.log(`signature - ${Buffer.from(signature).toString('hex')}`);
+
+  const res = hydro_sign_verify(signature.byteOffset, Buffer.from(message),                   // Verifying signature with public key
+    Buffer.from(message).length, Buffer.from(context), keypair.byteOffset)
+  
+  if(res == 0)
+    console.log('Signature is correctly valid')
+  signature.set([0])                                                                          // Modifying signature
+  console.log(`signature - ${Buffer.from(signature).toString('hex')}`);
+
+  manipulatedRes = hydro_sign_verify(signature.byteOffset, Buffer.from(message),              // Reverifying signature
+    Buffer.from(message).length, Buffer.from(context), keypair.byteOffset)
+  if(manipulatedRes != 0)
+    console.log('Signature is correctly invalid')
 }
