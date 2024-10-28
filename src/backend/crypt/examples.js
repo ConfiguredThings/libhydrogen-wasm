@@ -1,6 +1,7 @@
 const { readFile } = require('node:fs/promises');
 const { WASI } = require('node:wasi');
 const { argv, env } = require('node:process');
+const { TextDecoder } = require('node:util');
 
 const wasi = new WASI({
   version: 'preview1',
@@ -26,7 +27,7 @@ var instance, dataview;
   hash()
   keyed_hash()
   public_key_signing()
-
+  symmetric_encryption()
 })();
 
 function random_uniform() {         
@@ -150,4 +151,54 @@ function public_key_signing() {
   messageArr.fill(0);
   keypair.fill(0);
   signature.fill(0);
+}
+
+function symmetric_encryption() {
+  console.log('symmetric_encryption')
+  const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
+  const contextArr = new Uint8Array(dataview.buffer, 0,
+    context.length)
+  Buffer.from(context).copy(contextArr)
+  const message = 'Arbitrary data to encrypt'
+  const messageArr = new Uint8Array(dataview.buffer, contextArr.byteOffset +
+    contextArr.byteLength, message.length)
+  Buffer.from(message).copy(messageArr)  
+
+  console.log(`message - ${message}`);
+
+  const keyLength = 32
+  const nonceLength = 20
+  const tagLength = 16
+  const hydro_secretbox_HEADERBYTES = nonceLength + tagLength
+  const cipherTextLength = hydro_secretbox_HEADERBYTES + Buffer.from(message).length
+
+  const { hydro_secretbox_keygen, hydro_secretbox_encrypt,                                    // Importing libhydrogen's secretbox keygen and encrypt and decrypt functions
+    hydro_secretbox_decrypt } = instance.exports
+  
+  const key = new Uint8Array(dataview.buffer, messageArr.byteOffset + messageArr.byteLength,  // Reserving buffer for the key
+    keyLength)                                     
+  hydro_secretbox_keygen(key.byteOffset);
+  console.log(`key - ${Buffer.from(key).toString('hex')}`);
+
+  const ciphertext = new Uint8Array(dataview.buffer, key.byteOffset + key.byteLength,         // Reserving buffer for the cipher text
+    cipherTextLength)
+
+  hydro_secretbox_encrypt(ciphertext.byteOffset, messageArr.byteOffset,                       // Enciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
+    messageArr.byteLength, 0n, contextArr.byteOffset, key.byteOffset);
+
+  const decryptedPlaintext = new Uint8Array(dataview.buffer, ciphertext.byteOffset +          // Reserving buffer for the decrypted plain text
+    ciphertext.byteLength, ciphertext.byteLength - hydro_secretbox_HEADERBYTES)
+  
+  const res = hydro_secretbox_decrypt(decryptedPlaintext.byteOffset, ciphertext.byteOffset,   // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
+    ciphertext.byteLength, 0n, Buffer.from(context), key.byteOffset)
+  if (res == 0) {                                                                             // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
+      console.log('cipherText not forged')
+      const textDecoder = new TextDecoder()
+      console.log(`decryptedPlaintext - ${textDecoder.decode(decryptedPlaintext)}`);          // Decoding Uint8 encoded string
+  }
+  contextArr.fill(0);
+  messageArr.fill(0);
+  key.fill(0);
+  ciphertext.fill(0);
+  decryptedPlaintext.fill(0)
 }
