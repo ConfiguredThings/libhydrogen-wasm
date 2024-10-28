@@ -237,8 +237,6 @@ function symmetric_encryption_via_asymmetric_key_exchange() {
   const hash_state_BYTES = hydro_kx_PUBLICKEYBYTES + hydro_kx_SECRETKEYBYTES + ((32 / 8) * 12) + 1 + 3
 
   const { hydro_kx_keygen, hydro_kx_kk_1, hydro_kx_kk_2, hydro_kx_kk_3 } = instance.exports
-  console.log(`state byteoffset - ${hydro_kx_PUBLICKEYBYTES + hydro_kx_SECRETKEYBYTES}`)
-  console.log(`session byteoffset - ${2 * (hydro_kx_PUBLICKEYBYTES + hydro_kx_SECRETKEYBYTES)}`)
 
   const alice = { 
     static: {
