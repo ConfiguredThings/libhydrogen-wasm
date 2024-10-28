@@ -264,42 +264,45 @@ function symmetric_encryption_via_asymmetric_key_exchange() {
     1: new Uint8Array(dataview.buffer, bob.session.tx.byteOffset + bob.session.tx.byteLength, hydro_kx_KK_PACKET1BYTES),
     2: new Uint8Array(dataview.buffer, bob.session.tx.byteOffset + bob.session.tx.byteLength + hydro_kx_KK_PACKET1BYTES, hydro_kx_KK_PACKET2BYTES)
   }
-  console.log('------------ALICEKEYGEN------------')
-  hydro_kx_keygen(alice.static.pk.byteOffset)
-  console.log('---------------ALICE---------------')
-  console.log(alice)
-
-  console.log('-------------BOBKEYGEN-------------')
-  hydro_kx_keygen(bob.static.pk.byteOffset)
-  console.log('----------------BOB----------------')
-  console.log(bob)
+  console.log('------------ALICEKEYGEN------------')                                            // Generating static key pairs
+  hydro_kx_keygen(alice.static.pk.byteOffset)                                                   //
+  console.log('---------------ALICE---------------')                                            //
+  console.log(alice)                                                                            //
+                                                                                                //
+  console.log('-------------BOBKEYGEN-------------')                                            //
+  hydro_kx_keygen(bob.static.pk.byteOffset)                                                     //
+  console.log('----------------BOB----------------')                                            //
+  console.log(bob)                                                                              //
 
   console.log('-----------hydro_kx_kk_1-----------')
-  hydro_kx_kk_1(alice.state.byteOffset, packets[1].byteOffset, bob.static.pk.byteOffset, alice.static.pk.byteOffset)
+  hydro_kx_kk_1(alice.state.byteOffset, packets[1].byteOffset, bob.static.pk.byteOffset,        // Performing kk_1 (Generating alice's ephemeral keypair and packet 1)
+    alice.static.pk.byteOffset)
   console.log('---------------ALICE---------------')
   console.dir(alice, {'maxArrayLength': null})
   console.log('--------------packets--------------')
   console.log(packets)
 
   console.log('-----------hydro_kx_kk_2-----------')
-  hydro_kx_kk_2(bob.session.rx.byteOffset, packets[2].byteOffset, packets[1].byteOffset, alice.static.pk.byteOffset, bob.static.pk.byteOffset)
+  hydro_kx_kk_2(bob.session.rx.byteOffset, packets[2].byteOffset, packets[1].byteOffset,        // Performing kk_2 (Generating bob's response packet 2 and his copy of session keys)
+    alice.static.pk.byteOffset, bob.static.pk.byteOffset)
   console.log('----------------BOB----------------')
   console.dir(bob, {'maxArrayLength': null})
   console.log('--------------packets--------------')
   console.log(packets)
 
-
   console.log('-----------hydro_kx_kk_3-----------')
-  hydro_kx_kk_3(alice.state.byteOffset, alice.session.rx.byteOffset, packets[2].byteOffset, alice.static.pk.byteOffset)
+  hydro_kx_kk_3(alice.state.byteOffset, alice.session.rx.byteOffset, packets[2].byteOffset,     // Performing kk_3 (Generating Alice's copy of session keys)
+    alice.static.pk.byteOffset)
   console.log('---------------ALICE---------------')
   console.dir(alice, {'maxArrayLength': null})
 
   console.log('-----------KEYS EXCHANGED----------')
 
-  const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
-  const contextArr = new Uint8Array(dataview.buffer, packets[2].byteOffset + packets[2].byteLength,
-    context.length)
+  const context = 'Examples\0';                                                                 // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
+  const contextArr = new Uint8Array(dataview.buffer, packets[2].byteOffset +
+    packets[2].byteLength, context.length)
   Buffer.from(context).copy(contextArr)
+
   const message1 = 'Hello Bob'
   const messageArr1 = new Uint8Array(dataview.buffer, contextArr.byteOffset +
     contextArr.byteLength, message1.length)
@@ -322,13 +325,13 @@ function symmetric_encryption_via_asymmetric_key_exchange() {
   const decryptedPlaintext1 = new Uint8Array(dataview.buffer, ciphertext1.byteOffset +          // Reserving buffer for the decrypted plain text
     ciphertext1.byteLength, ciphertext1.byteLength - hydro_secretbox_HEADERBYTES)
   
-  const res1 = hydro_secretbox_decrypt(decryptedPlaintext1.byteOffset, ciphertext1.byteOffset,   // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
+  const res1 = hydro_secretbox_decrypt(decryptedPlaintext1.byteOffset, ciphertext1.byteOffset,  // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
     ciphertext1.byteLength, 0n, contextArr.byteOffset, bob.session.rx.byteOffset)
 
-  if (res1 == 0) {                                                                               // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
+  if (res1 == 0) {                                                                              // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
       console.log('ciphertext1 not forged')
       const textDecoder = new TextDecoder()
-      console.log(`decryptedPlaintext1 - ${textDecoder.decode(decryptedPlaintext1)}`);            // Decoding Uint8 encoded string
+      console.log(`decryptedPlaintext1 - ${textDecoder.decode(decryptedPlaintext1)}`);          // Decoding Uint8 encoded string
   }
 
   const message2 = 'Hello Alice'
@@ -347,12 +350,12 @@ function symmetric_encryption_via_asymmetric_key_exchange() {
   const decryptedPlaintext2 = new Uint8Array(dataview.buffer, ciphertext2.byteOffset +          // Reserving buffer for the decrypted plain text
     ciphertext2.byteLength, ciphertext2.byteLength - hydro_secretbox_HEADERBYTES)
   
-  const res2 = hydro_secretbox_decrypt(decryptedPlaintext2.byteOffset, ciphertext2.byteOffset,   // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
+  const res2 = hydro_secretbox_decrypt(decryptedPlaintext2.byteOffset, ciphertext2.byteOffset,  // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
     ciphertext2.byteLength, 0n, contextArr.byteOffset, alice.session.rx.byteOffset)
 
-  if (res2 == 0) {                                                                               // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
+  if (res2 == 0) {                                                                              // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
       console.log('ciphertext2 not forged')
       const textDecoder = new TextDecoder()
-      console.log(`decryptedPlaintext2 - ${textDecoder.decode(decryptedPlaintext2)}`);            // Decoding Uint8 encoded string
+      console.log(`decryptedPlaintext2 - ${textDecoder.decode(decryptedPlaintext2)}`);          // Decoding Uint8 encoded string
   }
 }
