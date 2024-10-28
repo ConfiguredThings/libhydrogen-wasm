@@ -190,7 +190,7 @@ function symmetric_encryption() {
     ciphertext.byteLength, ciphertext.byteLength - hydro_secretbox_HEADERBYTES)
   
   const res = hydro_secretbox_decrypt(decryptedPlaintext.byteOffset, ciphertext.byteOffset,   // Deciphering single message (thus use of msg_id 0n -- 'n' as libhydrogen expects i64)
-    ciphertext.byteLength, 0n, Buffer.from(context), key.byteOffset)
+    ciphertext.byteLength, 0n, contextArr.byteOffset, key.byteOffset)
   if (res == 0) {                                                                             // As secretbox is an authenticated encryption (AEAD) algorithm we check that the ciphertext was authentic
       console.log('cipherText not forged')
       const textDecoder = new TextDecoder()
