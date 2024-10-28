@@ -38,94 +38,116 @@ function random_uniform() {
 function hash() {
   console.log('hash')
   const { hydro_hash_hash } = instance.exports
-  const hash = new Uint8Array(dataview.buffer, 0, 32)                                         // Creating a typed array as hydro_hash_hash expects i32s
-  const context = 'Examples';                                                                 // libhydrogen's namespacing concept
+  const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
+  const contextArr = new Uint8Array(dataview.buffer, 0, context.length)
+  Buffer.from(context).copy(contextArr)                                                       // Copying context to shared buffer
   const message = 'Arbitrary data to hash';                                                   // Our message to be hashed
-  hydro_hash_hash(hash.byteOffset, hash.length, Buffer.from(message),                         // Call the imported hashing function
-    Buffer.from(message).length, Buffer.from(context), null)
+  const messageArr = new Uint8Array(dataview.buffer, contextArr.byteOffset +
+    contextArr.byteLength, message.length)
+  Buffer.from(message).copy(messageArr)                                                       // Copying message to shared buffer
+  const hash = new Uint8Array(dataview.buffer, messageArr.byteOffset +                        // Creating a typed array as hydro_hash_hash expects i32s
+    messageArr.byteLength, 32)                                         
+  hydro_hash_hash(hash.byteOffset, hash.length, messageArr.byteOffset,                        // Call the imported hashing function
+    messageArr.byteLength, contextArr.byteOffset, null)
   console.log(`hash - ${Buffer.from(hash).toString('hex')}`);
-  hash.fill(0, 0, 32);
+  contextArr.fill(0);
+  messageArr.fill(0)
+  hash.fill(0)
 }
 
 function keyed_hash() {
   console.log('keyed_hash')
-  const context = 'Examples'
+  const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
+  const contextArr = new Uint8Array(dataview.buffer, 0, context.length)
+  Buffer.from(context).copy(contextArr)
   const message = 'Arbitrary data to hash'
-
+  const messageArr = new Uint8Array(dataview.buffer, contextArr.byteOffset +
+    contextArr.byteLength, message.length)
+  Buffer.from(message).copy(messageArr)
   const { hydro_hash_keygen, hydro_hash_hash } = instance.exports                             // Importing libhydrogen's hashing keygen and hash functions
-  const keyedhash = new Uint8Array(dataview.buffer, 0, 32)                                    // Using first 128bits of memory to store hash
-  const key = new Uint8Array(dataview.buffer, 32, 32)                                         // Using second 128bits of memory to store key
-
+  const key = new Uint8Array(dataview.buffer, messageArr.byteOffset +                         // Creating buffer for sharing key
+    messageArr.byteLength, 32)                                         
+  const keyedhash = new Uint8Array(dataview.buffer, key.byteOffset + key.byteLength, 32)      // Creating buffer for keyed hash
   hydro_hash_keygen(key.byteOffset);                                                          // Generating hashing key
   console.log(`key - ${Buffer.from(key).toString('hex')}`);
 
-  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, Buffer.from(message),               // Hashing message with key
-    Buffer.from(message).length, Buffer.from(context), key.byteOffset);
+  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, messageArr.byteOffset,              // Hashing message with key
+    messageArr.byteLength, contextArr.byteOffset, key.byteOffset);
   const khash1 = Buffer.from(keyedhash).toString('hex')
   console.log(`khash1 - ${khash1}`);
-  keyedhash.fill(0, 0, 32);                                                                   // Resetting output buffer (seems to pollute state otherwise)
+  keyedhash.fill(0);                                                                          // Resetting output buffer (seems to pollute state otherwise)
 
-  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, Buffer.from(message),               // Hashing message with key again
-    Buffer.from(message).length, Buffer.from(context), key.byteOffset);
+  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, messageArr.byteOffset,              // Hashing message with key again
+    messageArr.byteLength, contextArr.byteOffset, key.byteOffset);
   const khash2 = Buffer.from(keyedhash).toString('hex')
   console.log(`khash2 - ${khash2}`);
-  keyedhash.fill(0, 0, 32);
+  keyedhash.fill(0);
 
   if(khash1 == khash2)                                                                        // Checking that the same hash is generated
     console.log('khash1 equals khash2')
 
   const presetKey = '40b31481206dbf0dd39e89cdf17e0a46ba0d9d9d2d8b51e76fae9788141a6037'        // Testing whether we can load a key and generate a matching hash created previously
   console.log(`presetKey - ${presetKey}`);  
-  const historicHash = '68cf508b03c92aff20d75816b233b4a755247045e326bd5dad4f6572ddbf9f98'
+  const historicHash = '464be316ad9980643e0bb34ca56f1bdd5f00a4615ecb23e0d597c89c90d441bb'
   console.log(`historicHash - ${historicHash}`);  
 
-  Buffer.from(presetKey, 'hex').copy(key, 0, 0, 32)                                           // Copying presetKey into key's buffer
+  Buffer.from(presetKey, 'hex').copy(key)                                                     // Copying presetKey into key's buffer
 
-  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, Buffer.from(message),               // Hashing message with presetKey
-    Buffer.from(message).length, Buffer.from(context), key.byteOffset);
+  hydro_hash_hash(keyedhash.byteOffset, keyedhash.length, messageArr.byteOffset,              // Hashing message with presetKey
+    messageArr.byteLength, contextArr.byteOffset, key.byteOffset);
   const khash3 = Buffer.from(keyedhash).toString('hex')
   console.log(`khash3 - ${khash3}`);  
   if(khash3 == historicHash)                                                                  // Testing hash matches historicHash
     console.log('khash3 using old key, matches historicHash')
   if(khash1 != khash3)                                                                        // ...and doesn't match the hashes with the latest key
     console.log('khash3 does not equal khash1')
-  keyedhash.fill(0, 0, 32);
-  key.fill(0, 0, 32);
+  contextArr.fill(0);
+  messageArr.fill(0);
+  keyedhash.fill(0);
+  key.fill(0);
 }
 
 function public_key_signing() {
   console.log('public_key_signing')
-  const context = 'Examples'
+  const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
+  const contextArr = new Uint8Array(dataview.buffer, 0, context.length)
+  Buffer.from(context).copy(contextArr)
   const message = 'Arbitrary data to sign'
+  const messageArr = new Uint8Array(dataview.buffer, contextArr.byteOffset +
+    contextArr.byteLength, message.length)
+  Buffer.from(message).copy(messageArr)
   const hydro_sign_BYTES = 64
   const hydro_sign_PUBLICKEYBYTES = 32
   const hydro_sign_SECRETKEYBYTES = 64
 
   const { hydro_sign_keygen, hydro_sign_create, hydro_sign_verify } = instance.exports        // Importing libhydrogen's signing keygen and signing and verification functions
-  const keypair = new Uint8Array(dataview.buffer, 0,                                          // Reserving memory for the keypair
-    hydro_sign_PUBLICKEYBYTES + hydro_sign_SECRETKEYBYTES)
-  
+  const keypair = new Uint8Array(dataview.buffer, messageArr.byteOffset +                     // Reserving memory for the keypair
+    messageArr.byteLength, hydro_sign_PUBLICKEYBYTES + hydro_sign_SECRETKEYBYTES)
   hydro_sign_keygen(keypair.byteOffset)                                                       // Generating keypair
 
-  const signature = new Uint8Array(dataview.buffer, keypair.length,                           // Reserving memory for the signature
+  const signature = new Uint8Array(dataview.buffer, keypair.byteOffset + keypair.byteLength,  // Reserving memory for the signature
     hydro_sign_BYTES)
 
-  hydro_sign_create(signature.byteOffset, Buffer.from(message),                               // Creating signature of message with secret key
-    Buffer.from(message).length, Buffer.from(context), 
-    keypair.byteOffset + hydro_sign_PUBLICKEYBYTES)
+  hydro_sign_create(signature.byteOffset, messageArr.byteOffset,                              // Creating signature of message with secret key
+    messageArr.byteLength, contextArr.byteOffset, keypair.byteOffset +
+    hydro_sign_PUBLICKEYBYTES)
   
   console.log(`signature - ${Buffer.from(signature).toString('hex')}`);
 
-  const res = hydro_sign_verify(signature.byteOffset, Buffer.from(message),                   // Verifying signature with public key
-    Buffer.from(message).length, Buffer.from(context), keypair.byteOffset)
+  const res = hydro_sign_verify(signature.byteOffset, messageArr.byteOffset,                  // Verifying signature with public key
+    messageArr.byteLength, contextArr.byteOffset, keypair.byteOffset)
   
   if(res == 0)
     console.log('Signature is correctly valid')
   signature.set([0])                                                                          // Modifying signature
   console.log(`signature - ${Buffer.from(signature).toString('hex')}`);
 
-  manipulatedRes = hydro_sign_verify(signature.byteOffset, Buffer.from(message),              // Reverifying signature
-    Buffer.from(message).length, Buffer.from(context), keypair.byteOffset)
+  manipulatedRes = hydro_sign_verify(signature.byteOffset, messageArr.byteOffset,             // Reverifying signature
+    messageArr.byteLength, contextArr.byteOffset, keypair.byteOffset)
   if(manipulatedRes != 0)
     console.log('Signature is correctly invalid')
+  contextArr.fill(0);
+  messageArr.fill(0);
+  keypair.fill(0);
+  signature.fill(0);
 }
