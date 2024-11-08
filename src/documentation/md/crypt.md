@@ -4,7 +4,7 @@
 
 [LibHydrogen](https://github.com/jedisct1/libhydrogen) is a very lightweight, computationally efficient, cryptographic library written in C. It is designed for applications such as microcontrollers. Therefore it is ideally suited to being ported to CHERIoT. 
 
-Whilst CHERIoT and the library's C implementation addresses the "edge" segment of the network, the core network relies on the Configured Things Platform, a software framework written in JavaScript and deployed on Nodejs. Therefore WebAssembly and the WebAssembly System Interface is utilised to execute a compiled LibHydrogen WebAssembly from the Nodejs runtime.
+Whilst CHERIoT and the library's C implementation addresses the "edge" segment of the network, the "core" network segment utilises the Configured Things Platform, a software framework written in JavaScript and deployed on Nodejs. Therefore WebAssembly and the WebAssembly System Interface is utilised to execute a compiled LibHydrogen WebAssembly from the Nodejs runtime.
 
 ### Encryption
 
