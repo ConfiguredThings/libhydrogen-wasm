@@ -72,7 +72,7 @@ This is the most versatile variant, but it requires two round trips. In this var
 
 - Digital signing
     - models signed as documents by their authors, allowing consumers to authenticate the origin of the model.
-    - origin could be to a specific identity, or where a policy specifies a certificate authority, any identity whose X.509 certificate is signed by a given CA.
+    - origin could be to a specific certificate-basd identity, or where a policy specifies a certificate authority, any identity whose X.509 certificate is signed by a given CA.
     - policies are encoded in a simple reverse polish binary logic: 
         ```
         (IDENTITY IDENTITY LOGICALOPERATOR)
@@ -87,4 +87,16 @@ However, in the case of the configuration broker, rather than providing end-to-e
 
 In the example use case of the CHERIoT boards being utilised within a smart metering infrastructure, it is desirable that the platform and endpoints can each sign their model updates. The platform signing infrastructure (such as IPs, domain names etc.) and billing (such as tariff, billing period) updates. 
 
-Encryption of both pathways is also desireable, where configuration updates of behind-the-meter systems and the tariff commercials may be considered sensitive confidentially, likewise billing data from the endpoint is likely considered sensitive, and should not be open to analysis by third parties.
+Encryption of both pathways is also desirable, where configuration updates of behind-the-meter systems and the tariff commercials may be considered sensitive confidentially, likewise billing data from the endpoint is likely considered sensitive, and should not be open to analysis by third parties.
+
+Notably, X.509 as defined in [RFC 3279](https://datatracker.ietf.org/doc/html/rfc3279), does not support LibHydrogen's digital signature algorithm, which whilst similar to EdDSA (support added in [RFC8410](https://datatracker.ietf.org/doc/html/rfc8410)), is not compatible[^EdDSA]:
+
+>EdDSA requires SHA-2, and arithmetic over Curve25519 in Edwards form.
+>
+>We already have a different hash function used everywhere else, and arithmetic over Curve25519 in Montgomery form used for key exchange. So we leverage what we already have. The primitives are different, but we still compute Schnorr signatures, over the same field size.
+>
+>And although a variant with a randomized nonce has been specified to mitigate this, standard EdDSA is very fragile against side channel attacks. This is especially a concern on embedded systems. Libhydrogen signatures uses the same mechanism as this variant to produce non-deterministic signatures that still resist a weak RNG.
+
+[^EdDSA]: https://github.com/jedisct1/libhydrogen/issues/21#issuecomment-382837226
+
+Therefore we will only be able to support pinning of specific public keys rather than certificates and CAs, otherwise additional cryptographic libraries will need to be supported to parse and validate certificates and trust chains.
