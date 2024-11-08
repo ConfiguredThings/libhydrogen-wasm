@@ -22,7 +22,7 @@ The below definition text is adapted from the [libhydrogen wiki](https://github.
 ## N
 
 - What Bob needs to know about Alice: **Alice's long-term public key**
-- What the Alice needs to know about the Bob: **nothing**
+- What Alice needs to know about Bob: **nothing**
 
 This variant is designed to anonymously send messages to a recipient using its public key.
 
