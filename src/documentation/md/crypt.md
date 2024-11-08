@@ -65,3 +65,26 @@ This is the most versatile variant, but it requires two round trips. In this var
 ![xx](../../../build/documentation/puml/crypt/kx_xx.svg)
 
 [^libhydrogenwiki]: This text is adapted from the [LibHydrogen wiki](https://github.com/jedisct1/libhydrogen/wiki).
+
+## Configuration broker design considerations
+
+`sfjs-crypto`, Configured Things' first approach to applying cryptographic model protections, was designed to support the following requirements:
+
+- Digital signing
+    - models signed as documents by their authors, allowing consumers to authenticate the origin of the model.
+    - origin could be to a specific identity, or where a policy specifies a certificate authority, any identity whose X.509 certificate is signed by a given CA.
+    - policies are encoded in a simple reverse polish binary logic: 
+        ```
+        (IDENTITY IDENTITY LOGICALOPERATOR)
+        ...
+        (ALICE BOB AND)
+        ```
+- Encryption
+    - models encrypted in order to protect any contained secrets between author and target system.
+    - the use of Diffie-Hellman Key Exchange to agree session keys between endpoints.
+
+However, in the case of the configuration broker, rather than providing end-to-end trust between the model author and endpoint, we are seeking to provide trust between the configuration platform and endpoints, who are communicated across an untrusted message bus.
+
+In the example use case of the CHERIoT boards being utilised within a smart metering infrastructure, it is desirable that the platform and endpoints can each sign their model updates. The platform signing infrastructure (such as IPs, domain names etc.) and billing (such as tariff, billing period) updates. 
+
+Encryption of both pathways is also desireable, where configuration updates of behind-the-meter systems and the tariff commercials may be considered sensitive confidentially, likewise billing data from the endpoint is likely considered sensitive, and should not be open to analysis by third parties.
