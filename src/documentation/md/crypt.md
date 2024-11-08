@@ -10,9 +10,7 @@ Whilst CHERIoT and the library's C implementation addresses the "edge" segment o
 
 LibHydrogen exposes its [`hydro_secretbox`](https://github.com/jedisct1/libhydrogen/wiki/Secret-key-encryption) API for symmetric encryption.
 
-To facilitate the secure exchange of symmetric session keys, LibHydrogen exposes its [`hydro_kx`](https://github.com/jedisct1/libhydrogen/wiki/Key-exchange) API for key exchange.
-
-LibHydrogen supports three means of exchanging session keys for the sending and receiving of encrypted data, named `N`, `KK` and `XX`.
+To facilitate the secure exchange of symmetric session keys, LibHydrogen exposes its [`hydro_kx`](https://github.com/jedisct1/libhydrogen/wiki/Key-exchange) API for key exchange. LibHydrogen supports three means of exchanging session keys for the sending and receiving of encrypted data, named `N`, `KK` and `XX`.
 
 > [!TIP]
 > These handshake patterns are borrowed from the [Noise Protocol Framework](https://noiseprotocol.org):
