@@ -89,7 +89,7 @@ In the example use case of the CHERIoT boards being utilised within a smart mete
 
 Encryption of both pathways is also desirable, where configuration updates of behind-the-meter systems and the tariff commercials may be considered sensitive confidentially, likewise billing data from the endpoint is likely considered sensitive, and should not be open to analysis by third parties.
 
-Notably, X.509 as defined in [RFC 3279](https://datatracker.ietf.org/doc/html/rfc3279), does not support LibHydrogen's digital signature algorithm, which whilst similar to EdDSA (support added in [RFC8410](https://datatracker.ietf.org/doc/html/rfc8410)), is not compatible[^EdDSA]:
+Notably, X.509 as defined in [RFC 3279](https://datatracker.ietf.org/doc/html/rfc3279), does not support LibHydrogen's digital signature algorithm, which whilst similar to EdDSA (support for which was added in [RFC8410](https://datatracker.ietf.org/doc/html/rfc8410)), is not compatible[^EdDSA]:
 
 >EdDSA requires SHA-2, and arithmetic over Curve25519 in Edwards form.
 >
