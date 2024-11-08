@@ -1,5 +1,11 @@
 # Cryptography
 
+## Libhydrogen
+
+Libhydrogen is a very lightweight, computationally efficient, cryptographic library written in C. It is designed for applications such as microcontrollers. Therefore it is ideally suited to being ported to CHERIoT. 
+
+Whilst CHERIoT and the library's C implementation addresses the "edge" segment of the network, the core network relies on the Configured Things Platform, a software framework written in JavaScript and deployed on Nodejs. Therefore WebAssembly and the WebAssembly System Interface is utilised to execute a compiled libhydrogen WebAssembly from the Nodejs runtime.
+
 Libhydrogen supports three means of exchanging session keys for the sending and receiving of encrypted data: `N`, `KK` and `XX`.
 
 These handshake patterns are borrowed from the [Noise Protocol Framework](https://noiseprotocol.org):
@@ -19,7 +25,7 @@ These handshake patterns are borrowed from the [Noise Protocol Framework](https:
 
 The below definition text is adapted from the [libhydrogen wiki](https://github.com/jedisct1/libhydrogen/wiki).
 
-## N
+### N
 
 - What Bob needs to know about Alice: **Alice's long-term public key**
 - What Alice needs to know about Bob: **nothing**
@@ -28,7 +34,7 @@ This variant is designed to anonymously send messages to a recipient using its p
 
 ![n](../../../build/documentation/puml/crypt/kx_n.svg)
 
-## KK
+### KK
 
 - What Bob needs to know about Alice: **Alice's public key**
 - What Alice needs to know about Bob: **Bob's public key**
@@ -37,7 +43,7 @@ This variant is designed to exchange messages between two parties that already k
 
 ![kk](../../../build/documentation/puml/crypt/kx_kk.svg)
 
-## XX
+### XX
 
 - What Bob needs to know about Alice: **nothing**
 - What Alice needs to know about Bob: **nothing**
