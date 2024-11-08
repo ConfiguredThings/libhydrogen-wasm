@@ -24,11 +24,9 @@ Libhydrogen supports three means of exchanging session keys for the sending and 
 >> - `K` = Static key for responder Known to initiator
 >> - `X` = Static key for responder Xmitted (“transmitted”) to initiator
 
-The below definition text is adapted from the [libhydrogen wiki](https://github.com/jedisct1/libhydrogen/wiki).
-
 ### `N`
 
-This variant is designed to anonymously send messages to a recipient using its public key.
+This variant is designed to anonymously send messages to a recipient using its public key.[^libhydrogenwiki]
 
 #### Prior knowledge 
 | Alice | Bob |
@@ -40,7 +38,7 @@ This variant is designed to anonymously send messages to a recipient using its p
 
 ### `KK`
 
-This variant is designed to exchange messages between two parties that already know each other's public key.
+This variant is designed to exchange messages between two parties that already know each other's public key.[^libhydrogenwiki]
 
 #### Prior knowledge 
 | Alice | Bob |
@@ -52,7 +50,7 @@ This variant is designed to exchange messages between two parties that already k
 
 ### `XX`
 
-This is the most versatile variant, but it requires two round trips. In this variant, the Bob and Alice don't need to share any prior data. However, the peers public keys will be exchanged. Discovered public keys can then be discarded, used for authentication, or reused later with the KK variant.
+This is the most versatile variant, but it requires two round trips. In this variant, the Bob and Alice don't need to share any prior data. However, the peers public keys will be exchanged. Discovered public keys can then be discarded, used for authentication, or reused later with the KK variant.[^libhydrogenwiki]
 
 #### Prior knowledge 
 | Alice | Bob |
@@ -61,3 +59,5 @@ This is the most versatile variant, but it requires two round trips. In this var
 
 
 ![xx](../../../build/documentation/puml/crypt/kx_xx.svg)
+
+[^libhydrogenwiki]: This text is adapted from the [libhydrogen wiki](https://github.com/jedisct1/libhydrogen/wiki).
