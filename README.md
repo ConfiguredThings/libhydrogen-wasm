@@ -5,7 +5,7 @@
 >[!TIP]
 > This repository utilises submodules, therefore when cloning use the following syntax:
 >```
->git clone --recursive
+>git submodule update --init --recursive
 >```
 
 Run the following commands to build and run a container in which the wasm library is built.
