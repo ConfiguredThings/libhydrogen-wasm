@@ -1,6 +1,21 @@
 # Cryptography
 
-Libhydrogen supports three means of exchanging session keys for the sending and receiving of encrypted data: `n`, `kk` and `xx`.
+Libhydrogen supports three means of exchanging session keys for the sending and receiving of encrypted data: `N`, `KK` and `XX`.
+
+These handshake patterns are borrowed from the [Noise Protocol Framework](https://noiseprotocol.org):
+
+> The fundamental interactive patterns are named with two characters, which indicate the status of the initiator and responder’s static keys:
+>
+>The first character refers to the initiator’s static key:
+> - `N` = No static key for initiator
+> - `K` = Static key for initiator Known to responder
+> - `X` = Static key for initiator Xmitted (“transmitted”) to responder
+> - `I` = Static key for initiator Immediately transmitted to responder, despite reduced or absent identity hiding
+>
+> The second character refers to the responder’s static key:
+> - `N` = No static key for responder
+> - `K` = Static key for responder Known to initiator
+> - `X` = Static key for responder Xmitted (“transmitted”) to initiator
 
 The below definition text is adapted from the [libhydrogen wiki](https://github.com/jedisct1/libhydrogen/wiki).
 
