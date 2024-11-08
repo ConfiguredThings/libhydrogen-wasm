@@ -1,0 +1,3 @@
+[submodule "src/common/vendor/libhydrogen"]
+	path = src/common/vendor/libhydrogen
+	url = git@github.com:configuredthings/libhydrogen.git
