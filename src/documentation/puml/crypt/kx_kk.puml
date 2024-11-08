@@ -2,12 +2,13 @@
 !pragma teoz true
 actor Alice
 actor Bob
+== Establish trust relationship ==
 Alice -> Alice: Generates long-term key pair
 activate Alice
 & Bob -> Bob: Generates long-term key pair
 activate Bob
 Alice <--> Bob: Public keys exchanged
-== Key Exchange ==
+== Establish session keys for encrypted communications ==
 Alice -> Alice: Initiate a key exchange,\ngenerating ephemeral key pair.
 activate Alice
 Alice -> Bob: Send ""packet1""

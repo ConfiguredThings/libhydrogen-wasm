@@ -1,8 +1,11 @@
 @startuml
 actor Alice
 actor Bob
+== Establish trust relationship ==
 Alice -> Alice: Generates long-term key pair
 activate Alice
+Alice --> Bob: Public key shared
+== Establish session keys for encrypted communications ==
 Bob -> Bob: Generates ephemeral key pair
 activate Bob
 Bob -> Bob: Generates session keys

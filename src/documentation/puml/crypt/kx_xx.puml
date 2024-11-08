@@ -2,6 +2,9 @@
 !pragma teoz true
 actor Alice
 actor Bob
+== Establish trust relationship ==
+note across: There is no pre-existing trust relationship
+== Establish session keys for encrypted communications ==
 Alice -> Alice: Generates long-term key pair
 activate Alice
 & Bob -> Bob: Generates long-term key pair
