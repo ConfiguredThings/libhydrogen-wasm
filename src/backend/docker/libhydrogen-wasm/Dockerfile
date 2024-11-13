@@ -13,4 +13,4 @@ RUN apk update && \
 
 WORKDIR /data/
 
-ENTRYPOINT [ "clang", "-target", "wasm32-wasi", "--sysroot=/usr/share/wasi-sysroot", "-O3", "-Wl,--export-all", "-o", "build/libhydrogen.wasm", "src/hydrogen.c" ]
+ENTRYPOINT [ "clang", "-target", "wasm32-wasi", "--sysroot=/usr/share/wasi-sysroot", "-O3", "-D__wasi__", "-Wl,--export-all", "-o", "build/libhydrogen.wasm", "src/hydrogen.c" ]
