@@ -23,13 +23,38 @@ var instance, dataview;
   const memory = instance.exports.memory                                                      // Importing memory object
   dataview = new DataView(memory.buffer);                                                     // DataView takes care of our platform specific endian conversions
 
-  random_uniform()
-  hash()
-  keyed_hash()
+  //random_uniform()
+  //hash()
+  //keyed_hash()
   public_key_signing()
-  symmetric_encryption()
-  symmetric_encryption_via_asymmetric_key_exchange()
+  //symmetric_encryption()
+  //symmetric_encryption_via_asymmetric_key_exchange()
 })();
+
+//
+// Write a buffer as a C style .h file
+//
+function dot_h(name, buffer, offset, length) {
+  console.log("-------------------------------------")
+  console.log(`static uint8_t ${name}[] = {`);
+  let n=0;
+  let o=offset;
+  line = '';
+  for (i=0; i< length; i++) {
+    let v = new Uint8Array(buffer, o, 1);
+    line += `0x${Buffer.from(v).toString('hex')}, `
+    o++;
+    n++;
+    if (n >= 16) {
+      console.log(`${line}`)
+      n = 0;
+      line = ''
+    }
+  }
+  console.log('};')
+  console.log("-------------------------------------")
+}
+
 
 function random_uniform() {         
   console.log('random_uniform')                       
@@ -127,6 +152,13 @@ function public_key_signing() {
     messageArr.byteLength, hydro_sign_PUBLICKEYBYTES + hydro_sign_SECRETKEYBYTES)
   hydro_sign_keygen(keypair.byteOffset)                                                       // Generating keypair
 
+  const pubKey = new Uint8Array(dataview.buffer, keypair.byteOffset, hydro_sign_PUBLICKEYBYTES);
+  const priKey = new Uint8Array(dataview.buffer, keypair.byteOffset + hydro_sign_PUBLICKEYBYTES, hydro_sign_SECRETKEYBYTES);
+  console.log(`pub key - ${Buffer.from(pubKey).toString('hex')}`);
+  console.log(`priv key - ${Buffer.from(priKey).toString('hex')}`);
+  dot_h("pubKey", dataview.buffer, keypair.byteOffset, hydro_sign_PUBLICKEYBYTES)  
+
+
   const signature = new Uint8Array(dataview.buffer, keypair.byteOffset + keypair.byteLength,  // Reserving memory for the signature
     hydro_sign_BYTES)
 
@@ -135,6 +167,7 @@ function public_key_signing() {
     hydro_sign_PUBLICKEYBYTES)
   
   console.log(`signature - ${Buffer.from(signature).toString('hex')}`);
+  dot_h("signature", dataview.buffer, keypair.byteOffset + keypair.byteLength, hydro_sign_BYTES)  
 
   const res = hydro_sign_verify(signature.byteOffset, messageArr.byteOffset,                  // Verifying signature with public key
     messageArr.byteLength, contextArr.byteOffset, keypair.byteOffset)
