@@ -1,0 +1,7 @@
+services:
+  crypt:
+    image: plantuml/plantuml
+    command: -Tsvg -o /build/ .
+    volumes:
+      - ./puml/crypt:/data:ro
+      - ../../build/documentation/puml/crypt:/build

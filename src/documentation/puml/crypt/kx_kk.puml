@@ -1,0 +1,20 @@
+@startuml
+!pragma teoz true
+actor Alice
+actor Bob
+== Establish trust relationship ==
+Alice -> Alice: Generates long-term key pair
+activate Alice
+& Bob -> Bob: Generates long-term key pair
+activate Bob
+Alice <--> Bob: Public keys exchanged
+== Establish session keys for encrypted communications ==
+Alice -> Alice: Initiate a key exchange,\ngenerating ephemeral key pair.
+activate Alice
+Alice -> Bob: Send ""packet1""
+Bob -> Bob: Processes ""packet1"" from Alice,\nand computes its copy of the\nsession keys
+activate Bob
+Bob -> Alice: Send ""packet2""
+Alice -> Alice: Processes ""packet2"" from Bob,\nand computes its copy of the\nsession keys
+activate Alice
+@enduml

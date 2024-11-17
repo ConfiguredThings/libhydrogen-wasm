@@ -1,0 +1,16 @@
+@startuml
+actor Alice
+actor Bob
+== Establish trust relationship ==
+Alice -> Alice: Generates long-term key pair
+activate Alice
+Alice --> Bob: Public key shared
+== Establish session keys for encrypted communications ==
+Bob -> Bob: Generates ephemeral key pair
+activate Bob
+Bob -> Bob: Generates session keys
+activate Bob
+Bob -> Alice: Send ""packet1""
+Alice -> Alice: Process ""packet1"" from Bob,\nand compute the session keys
+activate Alice
+@enduml

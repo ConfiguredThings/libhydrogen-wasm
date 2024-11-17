@@ -1,5 +1,11 @@
 # dsbd-sonata
 
+> [!TIP]
+> Documentation imagery can be rebuilt using docker compose:
+> ```bash
+> docker compose -f src/documentation/documentation.yaml up
+> ```
+
 ## libhydrogen wasm compilation
 
 >[!TIP]
