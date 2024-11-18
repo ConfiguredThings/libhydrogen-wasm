@@ -21,4 +21,11 @@ Run the following commands to build and run a container in which the wasm librar
 
 To run a set of examples that call into the wasm library demonstrating its functionality, run the following:
 
-1. `npm run examples`
+1. `cd src/backend/crypt`
+2. `npm run examples`
+   
+To generate a set of signing key files that can be used in JS and C, run the following:
+
+1. `cd src/backend/crypt`
+2. `npm run gen_signing_keys`
+
