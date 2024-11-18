@@ -27,5 +27,15 @@ To run a set of examples that call into the wasm library demonstrating its funct
 To generate a set of signing key files that can be used in JS and C, run the following:
 
 1. `cd src/backend/crypt`
-2. `npm run gen_signing_keys`
+2. `npm run gen_signing_keys -- config`
+
+will generate files
+```
+build/
+└── keys/
+    ├── config.pri
+    ├── config_pri_key.h
+    ├── config.pub
+    └── config_pub_key.h
+```
 

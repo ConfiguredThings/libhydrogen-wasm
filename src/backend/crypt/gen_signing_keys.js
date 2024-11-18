@@ -19,12 +19,11 @@ const wasi = new WASI({
 const imports = wasi.getImportObject();
 var instance, dataview;
 
-var dir;
 
 (async () => {
 
-  if (argv.length < 3) {
-    console.log(`usage: ${argv[1]} <dir>`);
+  if (argv.length < 4) {
+    console.log(`usage: ${argv[1]} <dir> <name>`);
     process.exit(-1);
   }
 
@@ -52,7 +51,7 @@ var dir;
   dataview = new DataView(memory.buffer);
 
   // Create the signing keys
-  gen_signing_keys(argv[2]);
+  gen_signing_keys(argv[3], argv[2]);
 
 })();
 
@@ -97,7 +96,7 @@ function dot_hex(filename, buffer, offset, length) {
 //
 // Generate a pair of signing keys
 //
-function gen_signing_keys(dir) {
+function gen_signing_keys(name, dir) {
 
   // Import libhydrogen's signing keygen
   const { hydro_sign_keygen } = instance.exports
@@ -111,11 +110,11 @@ function gen_signing_keys(dir) {
 
   hydro_sign_keygen(pubKeyOffset)
 
-  dot_h(join(dir, "pubKey.h"),  "pub_key", dataview.buffer,  pubKeyOffset,  hydro_sign_PUBLICKEYBYTES)  
-  dot_h(join(dir, "privKey.h"), "priv_key", dataview.buffer, privKeyOffset, hydro_sign_SECRETKEYBYTES)  
+  dot_h(join(dir, `${name}_pub_key.h`), `${name}_pub_key`, dataview.buffer,  pubKeyOffset,  hydro_sign_PUBLICKEYBYTES)  
+  dot_h(join(dir, `${name}_pri_key.h`), `${name}_pri_key`, dataview.buffer, privKeyOffset, hydro_sign_SECRETKEYBYTES)  
 
-  dot_hex(join(dir, "pubKey.hex"),  dataview.buffer, pubKeyOffset,  hydro_sign_PUBLICKEYBYTES)  
-  dot_hex(join(dir, "privKey.hex"), dataview.buffer, privKeyOffset, hydro_sign_SECRETKEYBYTES)  
+  dot_hex(join(dir, `${name}.pub`), dataview.buffer, pubKeyOffset,  hydro_sign_PUBLICKEYBYTES)  
+  dot_hex(join(dir, `${name}.pri`), dataview.buffer, privKeyOffset, hydro_sign_SECRETKEYBYTES)  
 
 }
 
