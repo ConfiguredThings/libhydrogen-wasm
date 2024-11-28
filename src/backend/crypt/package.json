@@ -7,7 +7,8 @@
     "preinstall": "npm run preinstall-docker && npm run preinstall-wasm",
     "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
     "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../common/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
-    "examples": "node examples.js"
+    "examples": "node examples.js",
+    "gen_signing_keys": "export WASM=$(pwd)/../../../build/backend/vendor/libhydrogen/libhydrogen.wasm;node gen_signing_keys.js ../../../build/keys"
   },
   "author": "Configured Things Ltd.",
   "license": "UNLICENSED",
