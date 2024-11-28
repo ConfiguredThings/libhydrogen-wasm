@@ -25,10 +25,74 @@ var instance, dataview;
   const memory = instance.exports.memory                                                      // Importing memory object
   dataview = new DataView(memory.buffer);                                                     // DataView takes care of our platform specific endian conversions
 
-  test()
+  hash();
+  test();
   
 })();
 
+////////////////////////////////////////////////////////////
+//
+// hash
+//
+///////////////////////////////////////////////////////////
+
+function hash() {
+
+    const hydro_hash_BYTES = 32;
+
+    console.log('hash')
+
+    let wasmBuffer = dataview.buffer;
+    const { hydro_hash_hash } = instance.exports;
+
+    const context = 'Examples';
+    const contextOffset = 0;
+    const contextArr = new Uint8Array(wasmBuffer, contextOffset, context.length)
+    Buffer.from(context).copy(contextArr)
+    
+    const message = 'Arbitrary data to hash';
+    const messageOffset = contextArr.byteOffset + contextArr.byteLength;
+    const messageArr = new Uint8Array(wasmBuffer, messageOffset, message.length)
+    Buffer.from(message).copy(messageArr)
+    
+    const hashOffset = messageArr.byteOffset + messageArr.byteLength;
+    const hash = new Uint8Array(wasmBuffer, hashOffset, hydro_hash_BYTES);                                         
+    
+    const hashKey  = Buffer.from("1876bc54ddeeee715f9a191ec676fd45af4f008a05c21cc7cd67ecbceadb6c1f", "hex");
+    const keyOffset = hash.byteOffset + hash.byteLength;
+    const keyArr = new Uint8Array(wasmBuffer, keyOffset, hashKey.length)
+    hashKey.copy(keyArr)
+      
+    console.log(`hash of ${message} with context ${context}`)
+    // Hash without a key
+    hydro_hash_hash(
+      hash.byteOffset, 
+      hash.length, 
+      messageArr.byteOffset,
+      messageArr.byteLength, 
+      contextArr.byteOffset, 
+      null)
+    console.log(`hash - ${Buffer.from(hash).toString('hex')}`);
+
+
+    // Hash with a key
+    hydro_hash_hash(
+      hash.byteOffset, 
+      hash.length, 
+      messageArr.byteOffset,
+      messageArr.byteLength, 
+      contextArr.byteOffset, 
+      keyArr.byteOffset)
+    console.log(`key - ${Buffer.from(keyArr).toString('hex')}`);  
+    console.log(`hash - ${Buffer.from(hash).toString('hex')}`);
+
+}
+
+///////////////////////////////////////////////
+//
+// Pub key signature verify
+//
+///////////////////////////////////////////////
 
 const pubKey  = Buffer.from("f0560a5b53ce2028f0cbe7cd197d3bae2cc03b354cdc55d912ca7a02074e9626", "hex");
 const privKey = Buffer.from("d9293348c2abd81c3f52c827640860f10faaf9a9304dce71dde2f5f10fec502cf0560a5b53ce2028f0cbe7cd197d3bae2cc03b354cdc55d912ca7a02074e9626", "hex");
