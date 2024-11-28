@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "cd ../../.. && husky src/backend/crypt",
-    "lint-staged": "lint-staged",
+    "lint-staged": "cd ../../.. && lint-staged",
     "preinstall": "npm run preinstall-docker && npm run preinstall-wasm",
     "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
     "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../common/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
@@ -32,8 +32,8 @@
     }
   },
   "lint-staged": {
-    "*.js": "prettier --write",
-    "*.ts": "prettier --write"
+    "src/backend/crypt/*.js": "prettier --write",
+    "src/backend/crypt/*.ts": "prettier --write"
   },
   "prettier": {
     "printWidth": 100,
