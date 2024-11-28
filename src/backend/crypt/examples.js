@@ -56,7 +56,7 @@ function hash() {
   messageArr.fill(0)
   hash.fill(0)
 }
- 
+
 function keyed_hash() {
   console.log('keyed_hash')
   const context = 'Examples\0';                                                               // libhydrogen's namespacing concept needs to be null terminated as context arg expected to char[]
