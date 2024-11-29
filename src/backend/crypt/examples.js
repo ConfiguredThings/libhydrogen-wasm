@@ -110,8 +110,7 @@ function hash() {
     Buffer.from(message).copy(messageArr);
 
     // Buffer for libHydrogen to write the hash into
-    const hashOffset = messageArr.byteOffset + messageArr.byteLength;
-    const hash = new Uint8Array(dataview.buffer, hashOffset, hydro.hash_BYTES);
+    const hash = reserve(offset, hydro.hash_BYTES);
 
     // Call the imported function
     hydro_hash_hash(
