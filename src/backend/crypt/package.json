@@ -11,7 +11,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "cd ../../.. && husky src/backend/crypt",
+    "prepare": "cd ../../.. && husky src/backend/crypt/.husky",
     "lint-staged": "cd ../../.. && lint-staged",
     "preinstall": "npm run preinstall-docker && npm run preinstall-wasm",
     "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
