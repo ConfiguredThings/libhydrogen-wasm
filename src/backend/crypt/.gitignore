@@ -1,0 +1,16 @@
+dist
+/node_modules
+/src/node_modules
+.vs
+.vscode
+src/.vs
+src/.vscode
+release
+tests
+package-lock.json
+src/package-lock.json
+components
+coverage
+logs
+.DS_Store
+.~lock*
