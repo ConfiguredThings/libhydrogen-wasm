@@ -11,35 +11,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "cd ../../.. && husky src/backend/crypt/.husky",
-    "lint-staged": "cd ../../.. && lint-staged",
     "preinstall": "npm run preinstall-docker && npm run preinstall-wasm",
     "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
     "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../common/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
     "examples": "node examples.js",
     "gen_signing_keys": "export WASM=$(pwd)/../../../build/backend/vendor/libhydrogen/libhydrogen.wasm;node gen_signing_keys.js ../../../build/keys"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.7",
-    "prettier": "^3.3.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "test"
-    }
-  },
-  "lint-staged": {
-    "src/backend/crypt/*.js": "prettier --write",
-    "src/backend/crypt/*.ts": "prettier --write"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "tabWidth": 4,
-    "semi": true,
-    "singleQuote": true
   },
   "engines": {
     "node": ">=20.10.0",

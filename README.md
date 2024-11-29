@@ -6,13 +6,22 @@
 > docker compose -f src/documentation/documentation.yaml up
 > ```
 
-## libhydrogen wasm compilation
+## libHydrogen wasm compilation
 
 >[!TIP]
 > This repository utilises submodules, therefore when cloning use the following syntax:
 >```
+>git clone --recursive  git@github.com:ConfiguredThings/dsbd-sonata.git
+>```
+>
+> After checking out a branch with different submodule uses: 
+>```
 >git submodule update --init --recursive
 >```
+
+Run the following from the top level directory to setup husky for linting
+
+1. `npm install`
 
 Run the following commands to build and run a container in which the wasm library is built.
 
