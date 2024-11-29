@@ -37,14 +37,6 @@ function reserve(offset, length) {
 }
 
 //
-// Helper function to clear the buffer upto the offset
-//
-function clear(offset) {
-    dataview.buffer.fill(0, offset.value);
-    offset.value = 0;
-}
-
-//
 // Main function
 //
 
