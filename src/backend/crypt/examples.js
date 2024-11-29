@@ -33,7 +33,6 @@ function reserve(offset, length) {
     let a = new Uint8Array(dataview.buffer, offset.value, length);
     let newOffset = a.byteOffset + a.byteLength;
     offset.value = newOffset;
-    console.log(`${offset.value} ${length} return ${a} ${offset.value} `);
     return a;
 }
 
