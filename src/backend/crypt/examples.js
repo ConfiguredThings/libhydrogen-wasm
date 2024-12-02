@@ -43,7 +43,7 @@ function reserve(offset, length) {
 (async () => {
     const wasm = await WebAssembly.compile(
         // Fetch our wasm built during npm install
-        await readFile('../../../build/backend/vendor/libhydrogen/libhydrogen.wasm'),
+        await readFile('../../../build/backend/crypt/vendor/libhydrogen/libhydrogen.wasm'),
     );
     instance = await WebAssembly.instantiate(wasm, imports);
 

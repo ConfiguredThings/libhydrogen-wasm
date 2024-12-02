@@ -11,11 +11,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npm run preinstall-docker && npm run preinstall-wasm",
-    "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../common/vendor/libhydrogen",
-    "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/vendor/libhydrogen:/data/build -v $(pwd)/../../common/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
+    "preinstall": "npm run preinstall-copy-libhydrogen-src && npm run preinstall-docker && npm run preinstall-wasm",
+    "preinstall-copy-libhydrogen-src": "mkdir -p ../../../build/backend/crypt/vendor && cp -r ../../common/vendor/libhydrogen ../../../build/backend/crypt/vendor/ && cp hydrogen.c ../../../build/backend/crypt/vendor/libhydrogen/",
+    "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../../build/backend/crypt/vendor/libhydrogen",
+    "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/crypt/vendor/libhydrogen:/data/build -v $(pwd)/../../../build/backend/crypt/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
     "examples": "node examples.js",
-    "gen_signing_keys": "export WASM=$(pwd)/../../../build/backend/vendor/libhydrogen/libhydrogen.wasm;node gen_signing_keys.js ../../../build/keys"
+    "gen_signing_keys": "export WASM=$(pwd)/../../../build/backend/crypt/vendor/libhydrogen/libhydrogen.wasm;node gen_signing_keys.js ../../../build/keys"
   },
   "engines": {
     "node": ">=20.10.0",
