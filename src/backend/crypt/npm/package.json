@@ -1,0 +1,19 @@
+{
+  "name": "@configuredthings/libhydrogen-wasm",
+  "version": "0.1.0",
+  "author": {
+    "name": "Configured Things Ltd.",
+    "email": "engineering@configuredthings.com",
+    "url": "https://configuredthings.com/"
+  },
+  "license": "UNLICENSED",
+  "description": "LibHydrogen WebAssembly",
+  "main": "libhydrogen.wasm",
+  "scripts": {
+  },
+  "engines": {
+    "node": ">=20.10.0",
+    "npm": ">=10.2.3"
+  },
+  "repository":"https://github.com/ConfiguredThings/dsbd-sonata"
+}

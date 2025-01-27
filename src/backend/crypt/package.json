@@ -1,19 +1,18 @@
 {
-  "name": "@configuredthings/libhydrogen",
-  "version": "0.1.0",
+  "name": "dsbd-sonata-libhydrogen-packaging",
+  "version": "0.0.0",
   "author": {
     "name": "Configured Things Ltd.",
     "email": "engineering@configuredthings.com",
     "url": "https://configuredthings.com/"
   },
   "license": "UNLICENSED",
-  "description": "LibHydrogen WebAssembly",
-  "main": "libhydrogen.wasm",
+  "description": "LibHydrogen WebAssembly Packaging",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npm run preinstall-copy-libhydrogen-src && npm run preinstall-copy-package-src && npm run preinstall-docker && npm run preinstall-wasm",
     "preinstall-copy-libhydrogen-src": "mkdir -p ../../../build/backend/crypt/vendor && cp -r ../../common/vendor/libhydrogen ../../../build/backend/crypt/vendor/ && cp hydrogen.c ../../../build/backend/crypt/vendor/libhydrogen/",
-    "preinstall-copy-package-src": "cp ./package*.json .npmignore libHydrogen.js ../../../build/backend/crypt/vendor/libhydrogen/",
+    "preinstall-copy-package-src": "cp ./npm/package*.json ./npm/.npmignore libHydrogen.js ../../../build/backend/crypt/vendor/libhydrogen/",
     "preinstall-docker": "docker build -t libhydrogen-wasm -f ../docker/libhydrogen-wasm/Dockerfile ../../../build/backend/crypt/vendor/libhydrogen",
     "preinstall-wasm": "docker run -v $(pwd)/../../../build/backend/crypt/vendor/libhydrogen:/data/build -v $(pwd)/../../../build/backend/crypt/vendor/libhydrogen:/data/src:ro -t libhydrogen-wasm",
     "examples": "node examples.js",
