@@ -6,7 +6,7 @@
     "email": "engineering@configuredthings.com",
     "url": "https://configuredthings.com/"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "description": "LibHydrogen WebAssembly",
   "main": "libhydrogen.wasm",
   "scripts": {
