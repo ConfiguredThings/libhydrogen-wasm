@@ -1,13 +1,13 @@
 {
-  "name": "dsbd-sonata",
-  "version": "0.0.0",
+  "name": "libhydrogen-wasm",
+  "version": "0.1.0",
   "description": "",
   "author": {
     "name": "Configured Things Ltd.",
     "email": "engineering@configuredthings.com",
     "url": "https://configuredthings.com/"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,16 +16,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ConfiguredThings/dsbd-sonata.git"
+    "url": "git+https://github.com/ConfiguredThings/libhydrogen-wasm.git"
   },
   "keywords": [
     "dsbd",
     "sonata"
   ],
   "bugs": {
-    "url": "https://github.com/ConfiguredThings/dsbd-sonata/issues"
+    "url": "https://github.com/ConfiguredThings/libhydrogen-wasm/issues"
   },
-  "homepage": "https://github.com/ConfiguredThings/dsbd-sonata#readme",
+  "homepage": "https://github.com/ConfiguredThings/libhydrogen-wasm#readme",
   "devDependencies": {
     "@types/node": "^20.10.0",
     "husky": "^9.0.11",
