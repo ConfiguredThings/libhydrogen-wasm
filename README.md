@@ -1,4 +1,9 @@
-# dsbd-sonata
+# libhydrogen-wasm
+
+This repository is used for generating a [LibHydrogen](https://libhydrogen.org) Web Assembly. 
+It forms part of a wider project that utilises the digital signing of JSON models produced by the [Configured Things](https://configuredthings.com) platform to securely supply configuration updates to IoT devices running on the [CHERIoT platform](https://cheriot.org). 
+
+Funding for this activity was provided by the [UKRI](https://www.ukri.org) [Digital Security by Design](https://www.dsbd.tech) program.
 
 > [!TIP]
 > Documentation imagery can be rebuilt using docker compose:
