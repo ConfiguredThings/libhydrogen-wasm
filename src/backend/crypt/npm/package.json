@@ -15,5 +15,5 @@
     "node": ">=20.10.0",
     "npm": ">=10.2.3"
   },
-  "repository":"https://github.com/ConfiguredThings/dsbd-sonata"
+  "repository":"https://github.com/ConfiguredThings/libhydrogen-wasm"
 }
