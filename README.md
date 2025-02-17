@@ -16,7 +16,7 @@ Funding for this activity was provided by the [UKRI](https://www.ukri.org) [Digi
 >[!TIP]
 > This repository utilises submodules, therefore when cloning use the following syntax:
 >```
->git clone --recursive  git@github.com:ConfiguredThings/dsbd-sonata.git
+>git clone --recursive  git@github.com:ConfiguredThings/libhydrogen-wasm.git
 >```
 >
 > After checking out a branch with different submodule uses: 
